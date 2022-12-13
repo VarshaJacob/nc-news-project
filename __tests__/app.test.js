@@ -8,6 +8,7 @@ const testData = require('../db/data/test-data/index');
 beforeEach(() => seed(testData));
 afterAll(() => db.end());
 
+//3
 describe('GET /api/topics task 3',() => {
     test('responds with status code 200',() => {
         return request(app).get('/api/topics')
@@ -24,7 +25,7 @@ describe('GET /api/topics task 3',() => {
         return request(app).get('/api/topics')
         .then(({body}) => {
             body.topics.forEach((obj) => {
-                expect(Object.keys(obj)).toEqual(['slug','description'])
+                expect(Object.keys(obj).every(key => ['description','slug'].includes(key))).toEqual(true)
             })
         });
     });
