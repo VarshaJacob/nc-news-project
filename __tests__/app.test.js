@@ -28,12 +28,12 @@ describe('GET /api/topics task 3',() => {
 
 
 //4
-describe.only('GET /api/articles task 4',() => {
+describe('GET /api/articles task 4',() => {
     test('responds with status code 200, appropriate object properties and values',() => {
         return request(app).get('/api/articles')
         .expect(200)
         .then(({body}) => {
-            expect(Array.isArray(body.articles)).toBe(true);
+            expect(body.articles.length).toBe(12);
             body.articles.forEach((articleObj) => {
                 expect(articleObj).toEqual(
                     expect.objectContaining({
@@ -46,6 +46,35 @@ describe.only('GET /api/articles task 4',() => {
                         comment_count: expect.any(String)
                     }))
             });
+        });
+        
+    });
+    test('response is in descding order of create_at',() => {
+        return request(app).get('/api/articles')
+        .then(({body}) => {
+            const descOrder= body.articles.sort((a,b) => b.created_at - a.created_at)
+            expect(body.articles).toEqual(descOrder)
+        })
+    })
+});
+
+//5
+describe('GET /api/articles/:article_id task 5',() => {
+    test('responds with status code 200, appropriate object properties and values',() => {
+        const reqarticle_id=1
+        return request(app).get(`/api/articles/${reqarticle_id}`)
+        .expect(200)
+        .then(({body}) =>{
+            expect(...body.article).toEqual(
+                expect.objectContaining({
+                    author: expect.any(String),
+                    title: expect.any(String),
+                    article_id: reqarticle_id,
+                    body: expect.any(String),
+                    topic: expect.any(String),
+                    created_at: expect.any(String),
+                    votes: expect.any(Number)
+                }))
         });
     });
 });

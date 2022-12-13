@@ -1,5 +1,6 @@
 const {getTopicInfo,
-    getArticleInfo} 
+    getArticleInfo,
+    getArticleIdInfo} 
     = require('../models/models');
 
 exports.getTopics = (req,res) => {
@@ -17,9 +18,12 @@ exports.getArticles = (req,res,next) => {
     });
 };
 
-exports.getArticleId = (req,res) => {
+exports.getArticleId = (req,res,next) => {
     const {article_id}=req.params;
-    getArticleIdinfo(article_id).then((article) => {
+    getArticleIdInfo(article_id).then((article) => {
         res.status(200).send({article})
+    })
+    .catch((err) => {
+        next(err)
     });
-}
+};

@@ -11,6 +11,8 @@ app.get('/api/topics',getTopics);
 
 app.get('/api/articles', getArticles);
 
+app.get('/api/articles/:article_id', getArticleId);
+
 app.use((err,req,res,next) => {
     res.status(500).send()
 })
