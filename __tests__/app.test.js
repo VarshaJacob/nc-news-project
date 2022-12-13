@@ -46,6 +46,3 @@ describe.only('GET /api/articles task 4',() => {
                         comment_count: expect.any(String)
                     }))
             });
-        });
-    });
-});
