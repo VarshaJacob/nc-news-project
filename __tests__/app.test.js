@@ -10,7 +10,7 @@ afterAll(() => db.end());
 
 //3
 describe('GET /api/topics task 3',() => {
-    test('responds with status code 200',() => {
+    test('responds with status code 200, an array, object with keys [slug, description] and with appropriate data types',() => {
         return request(app).get('/api/topics')
         .expect(200)
         .then(({body}) => {
@@ -20,14 +20,40 @@ describe('GET /api/topics task 3',() => {
                     expect.objectContaining({
                       slug: expect.any(String),
                       description: expect.any(String),
-                    })
-                  );
-                // expect.objectContaining({
-                //     'slug': expect(typeof(topicObj['slug'])).toBe('string'),
-                //     'description': expect(typeof(topicObj['description'])).toBe('string')
-                // })
-                // expect(Object.keys(obj)).toMatchObject(['description','slug'])
-            })
+                    }));
+            });
         });
     });
+});
+
+
+//4
+describe.only('GET /api/articles task 4',() => {
+    test('responds with status code 200, appropriate object properties and values',() => {
+        return request(app).get('/api/articles')
+        .expect(200)
+        .then(({body}) => {
+            expect(body.articles.length).toBe(12);
+            body.articles.forEach((articleObj) => {
+                expect(articleObj).toEqual(
+                    expect.objectContaining({
+                        author: expect.any(String),
+                        title: expect.any(String),
+                        article_id: expect.any(Number),
+                        topic: expect.any(String),
+                        created_at: expect.any(String),
+                        votes: expect.any(Number),
+                        comment_count: expect.any(String)
+                    }))
+            });
+        });
+        
+    });
+    test('response is in descding order of create_at',() => {
+        return request(app).get('/api/articles')
+        .then(({body}) => {
+            const descOrder= body.articles.sort((a,b) => b.created_at - a.created_at)
+            expect(body.articles).toEqual(descOrder)
+        })
+    })
 });
