@@ -8,6 +8,7 @@ const testData = require('../db/data/test-data/index');
 beforeEach(() => seed(testData));
 afterAll(() => db.end());
 
+//3
 describe('GET /api/topics task 3',() => {
     test('responds with status code 200',() => {
         return request(app).get('/api/topics')
@@ -26,6 +27,26 @@ describe('GET /api/topics task 3',() => {
             body.topics.forEach((obj) => {
                 expect(Object.keys(obj)).toEqual(['slug','description'])
             })
+        });
+    });
+});
+
+//4
+describe.only('GET /api/articles task 4',() => {
+    test('responds with status code 200',() => {
+        return request(app).get('/api/articles')
+        .expect(200)
+    });
+    test('respond body will contain an array of article objects',() => {
+        return request(app).get('/api/articles')
+        .then(({body}) => {
+            expect(Array.isArray(body)).toBe(true);
+        });
+    });
+    test('respond body will contain the properties author,title,article_id,topic,created_at,votes,comment_count',() => {
+        return request(app).get('/api/articles')
+        .then(({body}) => {
+            expect(Array.isArray(body)).toBe(true);
         });
     });
 });

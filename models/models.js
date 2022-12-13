@@ -1,9 +1,17 @@
 const db = require('../db/connection');
-// const {topicData} = require (`../db/data/${ENV}-data/index`);
 
 exports.getTopicInfo = () =>{
-    return db.query("SELECT * FROM topics;")
+    return db.query('SELECT * FROM topics;')
     .then(({rows}) => {
         return (rows);
     });
 };
+
+exports.getArticleInfo = () => {
+    const sqlquery = 'SELECT '
+    return db.query('SELECT * FROM articles;')
+    .then(({rows}) => {
+        console.log(rows)
+        return (rows);
+    });
+}
