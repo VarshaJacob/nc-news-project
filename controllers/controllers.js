@@ -8,8 +8,11 @@ exports.getTopics = (req,res) => {
     });
 };
 
-exports.getArticles = (req,res) => {
+exports.getArticles = (req,res,next) => {
     getArticleInfo().then((articles) =>{
-        res.status(200).send(articles)
-    });
+        res.status(200).send({articles})
+    })
+    .catch((err) => {
+        next(err)
+    })
 };
