@@ -10,43 +10,42 @@ afterAll(() => db.end());
 
 //3
 describe('GET /api/topics task 3',() => {
-    test('responds with status code 200',() => {
+    test('responds with status code 200, an array, object with keys [slug, description] and with appropriate data types',() => {
         return request(app).get('/api/topics')
         .expect(200)
-    });
-    test('respond body will contain an array of topic objects',() => {
-        return request(app).get('/api/topics')
         .then(({body}) => {
-            expect(Array.isArray(body.topics)).toBe(true);
             expect(body.topics.length).toBe(3);
-        });
-    });
-    test('respond topic will contain properties slug and description',() => {
-        return request(app).get('/api/topics')
-        .then(({body}) => {
-            body.topics.forEach((obj) => {
-                expect(Object.keys(obj)).toEqual(['slug','description'])
-            })
+            body.topics.forEach((topicObj) => {
+                expect(topicObj).toEqual(
+                    expect.objectContaining({
+                      slug: expect.any(String),
+                      description: expect.any(String),
+                    }));
+            });
         });
     });
 });
 
+
 //4
 describe.only('GET /api/articles task 4',() => {
-    test('responds with status code 200',() => {
+    test('responds with status code 200, appropriate object properties and values',() => {
         return request(app).get('/api/articles')
         .expect(200)
-    });
-    test('respond body will contain an array of article objects',() => {
-        return request(app).get('/api/articles')
         .then(({body}) => {
             expect(Array.isArray(body)).toBe(true);
-        });
-    });
-    test('respond body will contain the properties author,title,article_id,topic,created_at,votes,comment_count',() => {
-        return request(app).get('/api/articles')
-        .then(({body}) => {
-            expect(Array.isArray(body)).toBe(true);
+            body.forEach((articleObj) => {
+                expect(articleObj).toEqual(
+                    expect.objectContaining({
+                        author: expect.any(String),
+                        title: expect.any(String),
+                        article_id: expect.any(Number),
+                        topic: expect.any(String),
+                        created_at: expect.any(String),
+                        votes: expect.any(Number),
+                        comment_count: expect.any(String)
+                    }))
+            });
         });
     });
 });

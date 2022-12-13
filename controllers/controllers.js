@@ -9,7 +9,7 @@ exports.getTopics = (req,res) => {
 };
 
 exports.getArticles = (req,res) => {
-    getArticleInfo().then((rows) =>{
-        res.status(200).send(rows)
+    getArticleInfo().then((articles) =>{
+        res.status(200).send(articles)
     });
 };
