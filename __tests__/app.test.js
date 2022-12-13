@@ -33,7 +33,7 @@ describe.only('GET /api/articles task 4',() => {
         return request(app).get('/api/articles')
         .expect(200)
         .then(({body}) => {
-            expect(Array.isArray(body.articles)).toBe(true);
+            expect(body.articles.length).toBe(12);
             body.articles.forEach((articleObj) => {
                 expect(articleObj).toEqual(
                     expect.objectContaining({
@@ -47,5 +47,13 @@ describe.only('GET /api/articles task 4',() => {
                     }))
             });
         });
+        
     });
+    test('response is in descding order of create_at',() => {
+        return request(app).get('/api/articles')
+        .then(({body}) => {
+            const descOrder= body.articles.sort((a,b) => b.created_at - a.created_at)
+            expect(body.articles).toEqual(descOrder)
+        })
+    })
 });

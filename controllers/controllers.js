@@ -1,10 +1,11 @@
 const {getTopicInfo,
-    getArticleInfo} 
+    getArticleInfo,
+    getArticleIdInfo} 
     = require('../models/models');
 
 exports.getTopics = (req,res) => {
-    getTopicInfo().then((rows) => {
-    res.status(200).send(rows)
+    getTopicInfo().then((topics) => {
+    res.status(200).send({topics})
     });
 };
 
@@ -14,5 +15,12 @@ exports.getArticles = (req,res,next) => {
     })
     .catch((err) => {
         next(err)
-    })
+    });
 };
+
+exports.getArticleId = (req,res) => {
+    const {article_id}=req.params;
+    getArticleIdInfo(article_id).then((article) => {
+        res.status(200).send({article})
+    });
+}
