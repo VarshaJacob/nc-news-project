@@ -16,10 +16,16 @@ describe('GET /api/topics task 3',() => {
         .then(({body}) => {
             expect(body.topics.length).toBe(3);
             body.topics.forEach((topicObj) => {
-                expect.objectContaining({
-                    'slug': expect(typeof(topicObj['slug'])).toBe('string'),
-                    'description': expect(typeof(topicObj['description'])).toBe('string')
-                })
+                expect(topicObj).toEqual(
+                    expect.objectContaining({
+                      slug: expect.any(String),
+                      description: expect.any(String),
+                    })
+                  );
+                // expect.objectContaining({
+                //     'slug': expect(typeof(topicObj['slug'])).toBe('string'),
+                //     'description': expect(typeof(topicObj['description'])).toBe('string')
+                // })
                 // expect(Object.keys(obj)).toMatchObject(['description','slug'])
             })
         });
