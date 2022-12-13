@@ -33,7 +33,6 @@ describe.only('GET /api/articles task 4',() => {
         return request(app).get('/api/articles')
         .expect(200)
         .then(({body}) => {
-            // console.log(body)
             expect(Array.isArray(body.articles)).toBe(true);
             body.articles.forEach((articleObj) => {
                 expect(articleObj).toEqual(
