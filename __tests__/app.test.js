@@ -65,7 +65,7 @@ describe('GET /api/articles/:article_id task 5',() => {
         return request(app).get(`/api/articles/${reqarticle_id}`)
         .expect(200)
         .then(({body}) =>{
-            expect(...body.article).toEqual(
+            expect(body.article).toEqual(
                 expect.objectContaining({
                     author: expect.any(String),
                     title: expect.any(String),
@@ -77,15 +77,12 @@ describe('GET /api/articles/:article_id task 5',() => {
                 }))
         });
     });
-    test('responds with status code 200, when article_id is valid but non-existent',() => {
+    test('responds with status code 404, when article_id is valid but non-existent',() => {
         const reqarticle_id=89
         return request(app).get(`/api/articles/${reqarticle_id}`)
-        .expect(200)
-        .then(({body}) =>{
-            expect(body.article.length).toEqual(0)
-        });
+        .expect(404)
     });
-    test('responds with status code 200, when article_id is invalid',() => {
+    test('responds with status code 400, when article_id is invalid',() => {
         const reqarticle_id="varsha"
         return request(app).get(`/api/articles/${reqarticle_id}`)
         .expect(400)

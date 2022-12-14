@@ -11,6 +11,7 @@ const {getTopics,
 //controllers.error
 const {handle404Paths,
     handle500,
+    handlePsqlErrors,
     handleCustomErrors
     }
     =require('./controllers/controllers.error');
@@ -26,6 +27,9 @@ app.get('/api/articles/:article_id', getArticleId);
 
 //endpoint not covered
 app.all('*',handle404Paths)
+
+//PSQL errors
+app.use(handlePsqlErrors)
 
 //custom errors
 app.use(handleCustomErrors)
