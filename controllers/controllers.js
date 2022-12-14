@@ -1,5 +1,6 @@
 const {getTopicInfo,
     getArticleInfo,
+    getComments
     } 
     = require('../models/models');
 
@@ -18,3 +19,9 @@ exports.getArticles = (req,res,next) => {
     });
 };
 
+exports.getCommentByArticleId = (req,res) => {
+    const {article_id} = req.params;
+    getComments(article_id).then((comments) =>{
+        res.status(200).send({comments})
+    });
+};
