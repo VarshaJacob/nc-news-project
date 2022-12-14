@@ -28,7 +28,7 @@ describe('GET /api/topics task 3',() => {
 
 
 //4
-describe.only('GET /api/articles task 4',() => {
+describe('GET /api/articles task 4',() => {
     test('responds with status code 200, appropriate object properties and values',() => {
         return request(app).get('/api/articles')
         .expect(200)
@@ -56,4 +56,41 @@ describe.only('GET /api/articles task 4',() => {
             expect(body.articles).toEqual(descOrder)
         })
     })
+});
+
+//5
+describe('GET /api/articles/:article_id task 5',() => {
+    test('responds with status code 200, appropriate object properties and values',() => {
+        const reqarticle_id=1
+        return request(app).get(`/api/articles/${reqarticle_id}`)
+        .expect(200)
+        .then(({body}) =>{
+            expect(body.article).toEqual(
+                expect.objectContaining({
+                    author: expect.any(String),
+                    title: expect.any(String),
+                    article_id: reqarticle_id,
+                    body: expect.any(String),
+                    topic: expect.any(String),
+                    created_at: expect.any(String),
+                    votes: expect.any(Number)
+                }))
+        });
+    });
+    test('responds with status code 404, when article_id is valid but non-existent',() => {
+        const reqarticle_id=89
+        return request(app).get(`/api/articles/${reqarticle_id}`)
+        .expect(404)
+        .then((res) => {
+            expect(res.body).toEqual({message: 'Article ID not found'})
+        });
+    });
+    test('responds with status code 400, when article_id is invalid',() => {
+        const reqarticle_id="varsha"
+        return request(app).get(`/api/articles/${reqarticle_id}`)
+        .expect(400)
+        .then((res) => {
+            expect(res.body).toEqual({message: 'Invalid article ID'})
+        });
+    });
 });
