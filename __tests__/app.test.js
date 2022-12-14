@@ -79,11 +79,12 @@ describe('GET /api/articles/:article_id/comments task 6',() => {
             });
         });
     });
-    // test('responds with comments in descending order of creates_at',() => {
-    //     const reqarticle_id = 1;
-    //     return request(app).get(`/api/articles/${reqarticle_id}/comments`)
-    //     .then(({body}) => {
-
-    //     });
-    // })
+    test('responds with comments in descending order of creates_at',() => {
+        const reqarticle_id = 1;
+        return request(app).get(`/api/articles/${reqarticle_id}/comments`)
+        .then(({body}) => {
+            const descOrder= body.comments.sort((a,b) => b.created_at - a.created_at);
+            expect(body.comments).toEqual(descOrder)
+        });
+    });
 });
