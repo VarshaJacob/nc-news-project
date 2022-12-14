@@ -19,9 +19,12 @@ exports.getArticles = (req,res,next) => {
     });
 };
 
-exports.getCommentByArticleId = (req,res) => {
+exports.getCommentByArticleId = (req,res,next) => {
     const {article_id} = req.params;
     getComments(article_id).then((comments) =>{
         res.status(200).send({comments})
+    })
+    .catch((err) => {
+        next(err)
     });
 };
