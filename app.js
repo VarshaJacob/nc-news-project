@@ -1,20 +1,36 @@
 const express = require('express');
 const app=express();
 
+//controllers
 const {getTopics, 
     getArticles,
-    getArticleId}
+    getArticleId
+    }
     =require('./controllers/controllers');
 
+//controllers.error
+const {handle404Paths,
+    handle500,
+    handleCustomErrors
+    }
+    =require('./controllers/controllers.error');
 
+//3
 app.get('/api/topics',getTopics);
 
+//4
 app.get('/api/articles', getArticles);
 
+//5
 app.get('/api/articles/:article_id', getArticleId);
 
-app.use((err,req,res,next) => {
-    res.status(500).send()
-})
+//endpoint not covered
+app.all('*',handle404Paths)
+
+//custom errors
+app.use(handleCustomErrors)
+
+//Internal server error
+app.use(handle500)
 
 module.exports=app;
