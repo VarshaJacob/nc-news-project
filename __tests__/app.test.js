@@ -81,10 +81,16 @@ describe('GET /api/articles/:article_id task 5',() => {
         const reqarticle_id=89
         return request(app).get(`/api/articles/${reqarticle_id}`)
         .expect(404)
+        .then((res) => {
+            expect(res.body).toEqual({message: 'Article ID not found'})
+        });
     });
     test('responds with status code 400, when article_id is invalid',() => {
         const reqarticle_id="varsha"
         return request(app).get(`/api/articles/${reqarticle_id}`)
         .expect(400)
+        .then((res) => {
+            expect(res.body).toEqual({message: 'Invalid article ID'})
+        });
     });
 });
