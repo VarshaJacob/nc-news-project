@@ -94,3 +94,58 @@ describe('GET /api/articles/:article_id task 5',() => {
         });
     });
 });
+
+//6
+describe('GET /api/articles/:article_id/comments task 6',() => {
+    test('responds with status code 200, an array, object with appropriate data types',() => {
+        const reqarticle_id = 1;
+        return request(app).get(`/api/articles/${reqarticle_id}/comments`)
+        .expect(200)
+        .then(({body}) => {
+            console.log(body)
+            expect(body.comments.length).toBe(11)
+            body.comments.forEach((commentObj) => {
+                expect(commentObj).toEqual(
+                    expect.objectContaining({
+                      comment_id: expect.any(Number),
+                      votes: expect.any(Number),
+                      created_at: expect.any(String),
+                      author: expect.any(String),
+                      body: expect.any(String)
+                    }));
+            });
+        });
+    });
+    test('responds with comments in descending order of creates_at',() => {
+        const reqarticle_id = 1;
+        return request(app).get(`/api/articles/${reqarticle_id}/comments`)
+        .then(({body}) => {
+            const descOrder= body.comments.sort((a,b) => b.created_at - a.created_at);
+            expect(body.comments).toEqual(descOrder)
+        });
+    });
+    test('responds with status code 404, when article_id is valid but non-existent',() => {
+        const reqarticle_id=89
+        return request(app).get(`/api/articles/${reqarticle_id}/comments`)
+        .expect(404)
+        .then((res) => {
+            expect(res.body).toEqual({message: 'article_id not found'})
+        });
+    });
+    test('responds with status code 400, when article_id is invalid',() => {
+        const reqarticle_id="varsha"
+        return request(app).get(`/api/articles/${reqarticle_id}/comments`)
+        .expect(400)
+        .then((res) => {
+            expect(res.body).toEqual({message: 'Invalid article ID'})
+        });
+    });
+    test('responds with status code 200, when article_id has no comments gives empty array',() => {
+        const reqarticle_id= 10
+        return request(app).get(`/api/articles/${reqarticle_id}/comments`)
+        .expect(200)
+        .then((res) => {
+            expect(res.body.comments).toEqual([])
+        });
+    });
+});

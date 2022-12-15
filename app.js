@@ -4,7 +4,8 @@ const app=express();
 //controllers
 const {getTopics, 
     getArticles,
-    getArticleId
+    getArticleId,
+    getCommentByArticleId
     }
     =require('./controllers/controllers');
 
@@ -24,6 +25,9 @@ app.get('/api/articles', getArticles);
 
 //5
 app.get('/api/articles/:article_id', getArticleId);
+
+//6
+app.get('/api/articles/:article_id/comments', getCommentByArticleId)
 
 //endpoint not covered
 app.all('*',handle404Paths)
