@@ -1,6 +1,5 @@
 const db = require('../db/connection');
 
-
 //3
 exports.getTopicInfo = () =>{
     return db.query('SELECT * FROM topics;')
@@ -37,3 +36,4 @@ exports.getComments = (article_id) => {
             return (rows);
     });
 };
+
