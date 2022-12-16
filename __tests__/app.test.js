@@ -219,6 +219,7 @@ describe('POST /api/articles/:article_id/comments task 6',() => {
         });
     });
 });
+
     
 //8
 describe('PATCH /api/articles/:article_id task 8',() => {
@@ -280,3 +281,21 @@ describe('PATCH /api/articles/:article_id task 8',() => {
         });
     });
 });
+
+//9
+describe('GET /api/users task 9',() => {
+    test('responds with status code 200, array of objects with appropriate key and data types',() => {
+        return request(app).get('/api/users')
+        .expect(200)
+        .then(({body}) => {
+            expect(body.users.length).toBe(4);
+            body.users.forEach((userObj) => {
+                expect(userObj).toEqual(
+                    expect.objectContaining({
+                      username: expect.any(String),
+                      name: expect.any(String),
+                      avatar_url: expect.any(String)
+                    }));
+            });
+            });
+            });

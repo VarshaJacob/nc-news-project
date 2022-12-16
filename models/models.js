@@ -21,11 +21,7 @@ exports.getArticleInfo = () => {
 exports.getArticleIdInfo = (article_id) => {
     return db.query('SELECT * FROM articles WHERE article_id=$1;',[article_id])
     .then(({rows}) => {
-        if (rows.length === 0) {
-            return Promise.reject({status: 404, message: 'Article ID not found'})
-        } else {
-            return (rows[0])
-        }
+        return (rows[0])
     });
 };
 
@@ -52,6 +48,7 @@ exports.addNewComment = (comment,article_id) => {
     }
 };
 
+
 //8
 exports.updateArticleVotes = (article_id, votes) => {
     if(Object.keys(votes).length!==1){
@@ -64,4 +61,13 @@ exports.updateArticleVotes = (article_id, votes) => {
             return (rows[0])
         });
     }
+};
+
+//9
+exports.getUserInfo = () => {
+    return db.query('SELECT * FROM users;')
+    .then(({rows}) => {
+        console.log(rows)
+        return (rows);
+    });
 };
