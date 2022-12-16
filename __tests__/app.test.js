@@ -152,9 +152,9 @@ describe('GET /api/articles/:article_id/comments task 6',() => {
 //7
 describe('POST /api/articles/:article_id/comments task 6',() => {
     test('responds with status code 201, and posts comment with appropriate data types',() => {
-        const reqarticle_id = 1;
+        const reqArticleId = 1;
         const newComment = {username: 'butter_bridge', body: 'outstanding' }
-        return request(app).post(`/api/articles/${reqarticle_id}/comments`)
+        return request(app).post(`/api/articles/${reqArticleId}/comments`)
         .send(newComment)
         .expect(201)
         .then(({body}) => {
@@ -169,19 +169,19 @@ describe('POST /api/articles/:article_id/comments task 6',() => {
         });
     });
     test('responds with status code 206 if input is missing',() => {
-        const reqarticle_id = 1;
+        const reqArticleId = 1;
         const newComment = {body: 'outstanding' }
-        return request(app).post(`/api/articles/${reqarticle_id}/comments`)
+        return request(app).post(`/api/articles/${reqArticleId}/comments`)
         .send(newComment)
-        .expect(206)
+        .expect(400)
         .then(({body}) => {
             expect(body).toEqual({message: 'Missing information'})
         });
     });
     test('responds with status code 400 for invalid input',() => {
-        const reqarticle_id = 1;
+        const reqArticleId = 1;
         const newComment = {body: 30, username: 'butter_bridge' }
-        return request(app).post(`/api/articles/${reqarticle_id}/comments`)
+        return request(app).post(`/api/articles/${reqArticleId}/comments`)
         .send(newComment)
         .expect(400)
         .then(({body}) => {
@@ -189,9 +189,9 @@ describe('POST /api/articles/:article_id/comments task 6',() => {
         });
     });
     test('responds with status code 400 when username has valid input but non-existent in the table',() => {
-        const reqarticle_id = 1;
+        const reqArticleId = 1;
         const newComment = {body: 'outstanding', username: 'varsha' }
-        return request(app).post(`/api/articles/${reqarticle_id}/comments`)
+        return request(app).post(`/api/articles/${reqArticleId}/comments`)
         .send(newComment)
         .expect(400)
         .then(({body}) => {
@@ -199,9 +199,9 @@ describe('POST /api/articles/:article_id/comments task 6',() => {
         });
     });
     test('responds with status code 404, when article_id is valid but non-existent',() => {
-        const reqarticle_id=89
+        const reqArticleId=89
         const newComment = {body: 'outstanding', username: 'butter_bridge' }
-        return request(app).post(`/api/articles/${reqarticle_id}/comments`)
+        return request(app).post(`/api/articles/${reqArticleId}/comments`)
         .send(newComment)
         .expect(404)
         .then((res) => {
@@ -209,9 +209,9 @@ describe('POST /api/articles/:article_id/comments task 6',() => {
         });
     });
     test('responds with status code 400, when article_id is invalid',() => {
-        const reqarticle_id="varsha"
+        const reqArticleId="varsha"
         const newComment = {body: 'outstanding', username: 'butter_bridge' }
-        return request(app).post(`/api/articles/${reqarticle_id}/comments`)
+        return request(app).post(`/api/articles/${reqArticleId}/comments`)
         .send(newComment)
         .expect(400)
         .then((res) => {

@@ -38,9 +38,9 @@ exports.getComments = (article_id) => {
 };
 
 //7
-exports.newComment = (comment,article_id) => {
+exports.addNewComment = (comment,article_id) => {
     if(Object.keys(comment).length!==2){
-        return Promise.reject({status:206, message: 'Missing information'})
+        return Promise.reject({status:400, message: 'Missing information'})
     } else if (typeof(comment.username) !== 'string' || typeof(comment.body)!=='string'){
         return Promise.reject({status:400, message: 'Invalid input'})
     } else {

@@ -2,7 +2,7 @@ const {getTopicInfo,
     getArticleInfo,
     getComments,
     getArticleIdInfo,
-    newComment
+    addNewComment
     } 
     = require('../models/models');
 
@@ -56,9 +56,9 @@ exports.getCommentByArticleId = (req,res,next) => {
 };
 
 //7
-exports.addNewComment = (req,res,next) => {
+exports.postNewComment = (req,res,next) => {
     const {article_id} = req.params;
-    const promises = [checkExists('articles','article_id',article_id),newComment(req.body,article_id)];
+    const promises = [checkExists('articles','article_id',article_id),addNewComment(req.body,article_id)];
 
     Promise.all(promises)
     .then((response) => {
