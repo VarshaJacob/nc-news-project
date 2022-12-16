@@ -180,12 +180,22 @@ describe('POST /api/articles/:article_id/comments task 6',() => {
     });
     test('responds with status code 400 for invalid input',() => {
         const reqarticle_id = 1;
-        const newComment = {body: 'outstanding', username: 30 }
+        const newComment = {body: 30, username: 'butter_bridge' }
         return request(app).post(`/api/articles/${reqarticle_id}/comments`)
         .send(newComment)
         .expect(400)
         .then(({body}) => {
             expect(body).toEqual({message: 'Invalid input'})
+        });
+    });
+    test('responds with status code 400 when username has valid input but non-existent in the table',() => {
+        const reqarticle_id = 1;
+        const newComment = {body: 'outstanding', username: 'varsha' }
+        return request(app).post(`/api/articles/${reqarticle_id}/comments`)
+        .send(newComment)
+        .expect(400)
+        .then(({body}) => {
+            expect(body).toEqual({message: 'Key (author)=(varsha) is not present in table "users".'})
         });
     });
     test('responds with status code 404, when article_id is valid but non-existent',() => {
