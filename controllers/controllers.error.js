@@ -7,8 +7,7 @@ exports.handlePsqlErrors = (err,req,res,next) => {
         res.status(400).send({message: 'Invalid endpoint'})
     } else if (err.code === '23503'){
         res.status(400).send({message: err.detail})
-    }
-    else {
+    } else {
         next (err)
     }
 }

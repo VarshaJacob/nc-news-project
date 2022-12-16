@@ -2,7 +2,8 @@ const {getTopicInfo,
     getArticleInfo,
     getComments,
     getArticleIdInfo,
-    addNewComment
+    addNewComment,
+    updateArticleVotes
     } 
     = require('../models/models');
 
@@ -64,6 +65,22 @@ exports.postNewComment = (req,res,next) => {
     .then((response) => {
         const comment = response[1];
         res.status(201).send({comment});
+    })
+    .catch((err) => {
+        next(err)
+    });
+};
+
+//8
+exports.patchArticleById = (req,res,next) => {
+    const {article_id} = req.params;
+    const promises = [checkExists('articles', 'article_id',article_id), updateArticleVotes(article_id,req.body)];
+    
+
+    Promise.all(promises)
+    .then((response) => {
+        const updatedArticle = response[1];
+        res.status(200).send({updatedArticle})
     })
     .catch((err) => {
         next(err)

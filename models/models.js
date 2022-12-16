@@ -33,9 +33,10 @@ exports.getArticleIdInfo = (article_id) => {
 exports.getComments = (article_id) => {
     return db.query('SELECT comment_id,votes,created_at,author,body FROM comments WHERE article_id=$1 ORDER BY created_at DESC;',[article_id])
     .then(({rows}) => {
-            return (rows);
+        return (rows);
     });
 };
+
 
 //7
 exports.addNewComment = (comment,article_id) => {
@@ -48,5 +49,19 @@ exports.addNewComment = (comment,article_id) => {
         .then(({rows}) => {
             return (rows[0])
          })
+    }
+};
+
+//8
+exports.updateArticleVotes = (article_id, votes) => {
+    if(Object.keys(votes).length!==1){
+        return Promise.reject({status:400, message: 'Missing information'})
+    } else if (typeof(votes.inc_votes) !== 'number'){
+        return Promise.reject({status:400, message: 'Invalid input'})
+    } else {
+        return db.query('UPDATE articles SET votes=votes+$2 WHERE article_id=$1 RETURNING *;',[article_id,votes.inc_votes])
+        .then(({rows}) => {
+            return (rows[0])
+        });
     }
 };
