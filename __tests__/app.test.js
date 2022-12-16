@@ -220,6 +220,68 @@ describe('POST /api/articles/:article_id/comments task 6',() => {
     });
 });
 
+    
+//8
+describe('PATCH /api/articles/:article_id task 8',() => {
+    test('responds with status code 200, updates article and returns updated article',() => {
+        const reqArticleID = 1;
+        const votesToUpdate = {inc_votes: 29}
+        return request(app).patch(`/api/articles/${reqArticleID}`)
+        .send(votesToUpdate)
+        .expect(200)
+        .then(({body}) => {
+            expect(body.updatedArticle).toEqual(
+                expect.objectContaining({
+                    article_id: 1,
+                    title: "Living in the shadow of a great man",
+                    topic: "mitch",
+                    author: "butter_bridge",
+                    body: "I find this existence challenging",
+                    created_at: expect.any(String),
+                    votes: 129,
+                }));
+        });
+    });
+    test('responds with status code 400, when input is missing',() => {
+        const reqArticleID = 1;
+        const votesToUpdate = {}
+        return request(app).patch(`/api/articles/${reqArticleID}`)
+        .send(votesToUpdate)
+        .expect(400)
+        .then((res) => {
+            expect(res.body).toEqual({message: "Missing information"})
+        });
+    });
+    test('responds with status code 400, for invalid input',() => {
+        const reqArticleID = 1;
+        const votesToUpdate = {inc_votes: "varsha"}
+        return request(app).patch(`/api/articles/${reqArticleID}`)
+        .send(votesToUpdate)
+        .expect(400)
+        .then((res) => {
+            expect(res.body).toEqual({message: "Invalid input"})
+    test('responds with status code 404, when article_id is valid but non-existent',() => {
+        const reqArticleId=89
+        const votesToUpdate = {inc_votes: 29}
+        return request(app).patch(`/api/articles/${reqArticleId}`)
+        .send(votesToUpdate)
+        .expect(404)
+        .then((res) => {
+            expect(res.body).toEqual({message: 'article_id not found'})
+        });
+    });
+    test('responds with status code 400, when article_id is invalid',() => {
+        const reqArticleId="varsha"
+        const votesToUpdate = {inc_votes: 29}
+        return request(app).patch(`/api/articles/${reqArticleId}`)
+        .send(votesToupdate)
+        .expect(400)
+        .then((res) => {
+            expect(res.body).toEqual({message: 'Invalid endpoint'})
+        });
+    });
+});
+
 //9
 describe('GET /api/users task 9',() => {
     test('responds with status code 200, array of objects with appropriate key and data types',() => {
@@ -235,6 +297,5 @@ describe('GET /api/users task 9',() => {
                       avatar_url: expect.any(String)
                     }));
             });
-        });
-    });
-});
+            });
+            });

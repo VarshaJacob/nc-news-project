@@ -7,6 +7,7 @@ const {getTopics,
     getArticleId,
     getCommentByArticleId,
     postNewComment,
+    patchArticleById,
     getUsers
     }
     =require('./controllers/controllers');
@@ -20,6 +21,7 @@ const {handle404Paths,
     =require('./controllers/controllers.error');
 
 app.use(express.json());
+
 
 //3
 app.get('/api/topics',getTopics);
@@ -36,8 +38,13 @@ app.get('/api/articles/:article_id/comments', getCommentByArticleId);
 //7
 app.post('/api/articles/:article_id/comments', postNewComment);
 
+//8
+app.patch('/api/articles/:article_id', patchArticleById);
+
 //9
 app.get('/api/users', getUsers);
+
+
 
 //endpoint not covered
 app.all('*',handle404Paths)
