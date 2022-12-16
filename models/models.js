@@ -67,7 +67,6 @@ exports.updateArticleVotes = (article_id, votes) => {
 exports.getUserInfo = () => {
     return db.query('SELECT * FROM users;')
     .then(({rows}) => {
-        console.log(rows)
         return (rows);
     });
 };

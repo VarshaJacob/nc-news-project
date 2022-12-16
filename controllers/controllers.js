@@ -90,7 +90,6 @@ exports.patchArticleById = (req,res,next) => {
 
 //9
 exports.getUsers = (req,res) => {
-    console.log('controller')
     getUserInfo().then((users) => {
         res.status(200).send({users})
     });
