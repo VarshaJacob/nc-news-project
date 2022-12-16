@@ -43,7 +43,7 @@ describe('GET /api/articles task 4',() => {
                         topic: expect.any(String),
                         created_at: expect.any(String),
                         votes: expect.any(Number),
-                        comment_count: expect.any(String)
+                        comment_count: expect.any(Number)
                     }))
             });
         });
@@ -300,5 +300,52 @@ describe('GET /api/users task 9',() => {
                     }));
             });
         });     
+    });
+});
+
+//10
+describe.only('GET /api/articles task 10',() => {
+    test('responds with status code 200, with topic query',() => {
+        return request(app).get('/api/articles?topic=mitch')
+        .expect(200)
+        .then(({body}) => {
+            expect(body.articles.length).toBe(11);
+            body.articles.forEach((articleObj) => {
+                expect(articleObj).toEqual(
+                    expect.objectContaining({
+                        author: expect.any(String),
+                        title: expect.any(String),
+                        article_id: expect.any(Number),
+                        topic: "mitch",
+                        created_at: expect.any(String),
+                        votes: expect.any(Number),
+                        comment_count: expect.any(Number)
+                    }));
+            });
+            const sortOrder= body.articles.sort((a,b) => b.created_at - a.created_at)
+            expect(body.articles).toEqual(sortOrder)
+        });
+    });
+    test.only('responds with status code 200, with topic and sort by query',() => {
+        return request(app).get('/api/articles?topic=mitch&sort_by=votes&order=asc')
+        .expect(200)
+        .then(({body}) => {
+            expect(body.articles.length).toBe(11);
+            body.articles.forEach((articleObj) => {
+                expect(articleObj).toEqual(
+                    expect.objectContaining({
+                        author: expect.any(String),
+                        title: expect.any(String),
+                        article_id: expect.any(Number),
+                        topic: "mitch",
+                        created_at: expect.any(String),
+                        votes: expect.any(Number),
+                        comment_count: expect.any(Number)
+                    }));
+            });
+            const sortOrder= body.articles.sort((a,b) => b.votes - a.votes)
+            console.log(body.articles)
+            expect(body.articles).toEqual(sortOrder)
+        });
     });
 });
