@@ -260,6 +260,8 @@ describe('PATCH /api/articles/:article_id task 8',() => {
         .expect(400)
         .then((res) => {
             expect(res.body).toEqual({message: "Invalid input"})
+        });
+    });
     test('responds with status code 404, when article_id is valid but non-existent',() => {
         const reqArticleId=89
         const votesToUpdate = {inc_votes: 29}
@@ -274,7 +276,7 @@ describe('PATCH /api/articles/:article_id task 8',() => {
         const reqArticleId="varsha"
         const votesToUpdate = {inc_votes: 29}
         return request(app).patch(`/api/articles/${reqArticleId}`)
-        .send(votesToupdate)
+        .send(votesToUpdate)
         .expect(400)
         .then((res) => {
             expect(res.body).toEqual({message: 'Invalid endpoint'})
@@ -297,5 +299,6 @@ describe('GET /api/users task 9',() => {
                       avatar_url: expect.any(String)
                     }));
             });
-            });
-            });
+        });     
+    });
+});
