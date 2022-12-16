@@ -2,6 +2,7 @@ const {getTopicInfo,
     getArticleInfo,
     getComments,
     getArticleIdInfo,
+    addNewComment,
     updateArticleVotes
     } 
     = require('../models/models');
@@ -28,8 +29,12 @@ exports.getArticles = (req,res,next) => {
 //5
 exports.getArticleId = (req,res,next) => {
     const {article_id}=req.params;
-    getArticleIdInfo(article_id).then((article) => {
-        res.status(200).send({article})
+    const promises = [checkExists('articles', 'article_id',article_id),getArticleIdInfo(article_id)];
+    
+    Promise.all(promises)
+    .then((response) => {
+        const article=response[1];
+        res.status(200).send({article});
     })
     .catch((err) => {
         next(err)
@@ -51,6 +56,21 @@ exports.getCommentByArticleId = (req,res,next) => {
     });
 };
 
+//7
+exports.postNewComment = (req,res,next) => {
+    const {article_id} = req.params;
+    const promises = [checkExists('articles','article_id',article_id),addNewComment(req.body,article_id)];
+
+    Promise.all(promises)
+    .then((response) => {
+        const comment = response[1];
+        res.status(201).send({comment});
+    })
+    .catch((err) => {
+        next(err)
+    });
+};
+
 //8
 exports.patchArticleById = (req,res,next) => {
     const {article_id} = req.params;
@@ -64,6 +84,6 @@ exports.patchArticleById = (req,res,next) => {
     })
     .catch((err) => {
         next(err)
-    })
-}
+    });
+};
 

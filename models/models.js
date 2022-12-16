@@ -37,6 +37,21 @@ exports.getComments = (article_id) => {
     });
 };
 
+
+//7
+exports.addNewComment = (comment,article_id) => {
+    if(Object.keys(comment).length!==2){
+        return Promise.reject({status:400, message: 'Missing information'})
+    } else if (typeof(comment.username) !== 'string' || typeof(comment.body)!=='string'){
+        return Promise.reject({status:400, message: 'Invalid input'})
+    } else {
+        return db.query('INSERT INTO comments (author,body,article_id) VALUES ($1,$2,$3) RETURNING *;',[comment.username,comment.body,article_id])
+        .then(({rows}) => {
+            return (rows[0])
+         })
+    }
+};
+
 //8
 exports.updateArticleVotes = (article_id, votes) => {
     if(Object.keys(votes).length!==1){
@@ -49,5 +64,4 @@ exports.updateArticleVotes = (article_id, votes) => {
             return (rows[0])
         });
     }
-    
 };

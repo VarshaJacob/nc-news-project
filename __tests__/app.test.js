@@ -82,7 +82,7 @@ describe('GET /api/articles/:article_id task 5',() => {
         return request(app).get(`/api/articles/${reqarticle_id}`)
         .expect(404)
         .then((res) => {
-            expect(res.body).toEqual({message: 'Article ID not found'})
+            expect(res.body).toEqual({message: 'article_id not found'})
         });
     });
     test('responds with status code 400, when article_id is invalid',() => {
@@ -149,6 +149,77 @@ describe('GET /api/articles/:article_id/comments task 6',() => {
     });
 });
 
+//7
+describe('POST /api/articles/:article_id/comments task 6',() => {
+    test('responds with status code 201, and posts comment with appropriate data types',() => {
+        const reqArticleId = 1;
+        const newComment = {username: 'butter_bridge', body: 'outstanding' }
+        return request(app).post(`/api/articles/${reqArticleId}/comments`)
+        .send(newComment)
+        .expect(201)
+        .then(({body}) => {
+            expect(body.comment).toEqual(
+                expect.objectContaining({
+                    comment_id: 19,
+                    votes: 0,
+                    created_at: expect.any(String),
+                    author: 'butter_bridge',
+                    body: 'outstanding'
+                }));
+        });
+    });
+    test('responds with status code 206 if input is missing',() => {
+        const reqArticleId = 1;
+        const newComment = {body: 'outstanding' }
+        return request(app).post(`/api/articles/${reqArticleId}/comments`)
+        .send(newComment)
+        .expect(400)
+        .then(({body}) => {
+            expect(body).toEqual({message: 'Missing information'})
+        });
+    });
+    test('responds with status code 400 for invalid input',() => {
+        const reqArticleId = 1;
+        const newComment = {body: 30, username: 'butter_bridge' }
+        return request(app).post(`/api/articles/${reqArticleId}/comments`)
+        .send(newComment)
+        .expect(400)
+        .then(({body}) => {
+            expect(body).toEqual({message: 'Invalid input'})
+        });
+    });
+    test('responds with status code 400 when username has valid input but non-existent in the table',() => {
+        const reqArticleId = 1;
+        const newComment = {body: 'outstanding', username: 'varsha' }
+        return request(app).post(`/api/articles/${reqArticleId}/comments`)
+        .send(newComment)
+        .expect(400)
+        .then(({body}) => {
+            expect(body).toEqual({message: 'Key (author)=(varsha) is not present in table "users".'})
+        });
+    });
+    test('responds with status code 404, when article_id is valid but non-existent',() => {
+        const reqArticleId=89
+        const newComment = {body: 'outstanding', username: 'butter_bridge' }
+        return request(app).post(`/api/articles/${reqArticleId}/comments`)
+        .send(newComment)
+        .expect(404)
+        .then((res) => {
+            expect(res.body).toEqual({message: 'article_id not found'})
+        });
+    });
+    test('responds with status code 400, when article_id is invalid',() => {
+        const reqArticleId="varsha"
+        const newComment = {body: 'outstanding', username: 'butter_bridge' }
+        return request(app).post(`/api/articles/${reqArticleId}/comments`)
+        .send(newComment)
+        .expect(400)
+        .then((res) => {
+            expect(res.body).toEqual({message: 'Invalid endpoint'})
+        });
+    });
+});
+    
 //8
 describe('PATCH /api/articles/:article_id task 8',() => {
     test('responds with status code 200, updates article and returns updated article',() => {
@@ -188,8 +259,6 @@ describe('PATCH /api/articles/:article_id task 8',() => {
         .expect(400)
         .then((res) => {
             expect(res.body).toEqual({message: "Invalid input"})
-        });
-    });
     test('responds with status code 404, when article_id is valid but non-existent',() => {
         const reqArticleId=89
         const votesToUpdate = {inc_votes: 29}
@@ -204,7 +273,7 @@ describe('PATCH /api/articles/:article_id task 8',() => {
         const reqArticleId="varsha"
         const votesToUpdate = {inc_votes: 29}
         return request(app).patch(`/api/articles/${reqArticleId}`)
-        .send(votesToUpdate)
+        .send(votesToupdate)
         .expect(400)
         .then((res) => {
             expect(res.body).toEqual({message: 'Invalid endpoint'})
