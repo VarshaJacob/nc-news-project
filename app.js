@@ -5,7 +5,8 @@ const app=express();
 const {getTopics, 
     getArticles,
     getArticleId,
-    getCommentByArticleId
+    getCommentByArticleId,
+    patchArticleById
     }
     =require('./controllers/controllers');
 
@@ -16,6 +17,8 @@ const {handle404Paths,
     handleCustomErrors
     }
     =require('./controllers/controllers.error');
+
+app.use(express.json())
 
 //3
 app.get('/api/topics',getTopics);
@@ -28,6 +31,9 @@ app.get('/api/articles/:article_id', getArticleId);
 
 //6
 app.get('/api/articles/:article_id/comments', getCommentByArticleId)
+
+//8
+app.patch('/api/articles/:article_id', patchArticleById)
 
 //endpoint not covered
 app.all('*',handle404Paths)

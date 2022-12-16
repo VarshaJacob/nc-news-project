@@ -4,7 +4,7 @@ exports.handle404Paths = (req,res,next) => {
 
 exports.handlePsqlErrors = (err,req,res,next) => {
     if (err.code === '22P02') {
-        res.status(400).send({message: 'Invalid article ID'})
+        res.status(400).send({message: 'Invalid endpoint'})
     } else {
         next (err)
     }

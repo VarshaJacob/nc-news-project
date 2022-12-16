@@ -90,7 +90,7 @@ describe('GET /api/articles/:article_id task 5',() => {
         return request(app).get(`/api/articles/${reqarticle_id}`)
         .expect(400)
         .then((res) => {
-            expect(res.body).toEqual({message: 'Invalid article ID'})
+            expect(res.body).toEqual({message: 'Invalid endpoint'})
         });
     });
 });
@@ -102,7 +102,6 @@ describe('GET /api/articles/:article_id/comments task 6',() => {
         return request(app).get(`/api/articles/${reqarticle_id}/comments`)
         .expect(200)
         .then(({body}) => {
-            console.log(body)
             expect(body.comments.length).toBe(11)
             body.comments.forEach((commentObj) => {
                 expect(commentObj).toEqual(
@@ -137,7 +136,7 @@ describe('GET /api/articles/:article_id/comments task 6',() => {
         return request(app).get(`/api/articles/${reqarticle_id}/comments`)
         .expect(400)
         .then((res) => {
-            expect(res.body).toEqual({message: 'Invalid article ID'})
+            expect(res.body).toEqual({message: 'Invalid endpoint'})
         });
     });
     test('responds with status code 200, when article_id has no comments gives empty array',() => {
@@ -146,6 +145,69 @@ describe('GET /api/articles/:article_id/comments task 6',() => {
         .expect(200)
         .then((res) => {
             expect(res.body.comments).toEqual([])
+        });
+    });
+});
+
+//8
+describe('PATCH /api/articles/:article_id task 8',() => {
+    test('responds with status code 200, updates article and returns updated article',() => {
+        const reqArticleID = 1;
+        const votesToUpdate = {inc_votes: 29}
+        return request(app).patch(`/api/articles/${reqArticleID}`)
+        .send(votesToUpdate)
+        .expect(200)
+        .then(({body}) => {
+            expect(body.updatedArticle).toEqual(
+                expect.objectContaining({
+                    article_id: 1,
+                    title: "Living in the shadow of a great man",
+                    topic: "mitch",
+                    author: "butter_bridge",
+                    body: "I find this existence challenging",
+                    created_at: expect.any(String),
+                    votes: 129,
+                }));
+        });
+    });
+    test('responds with status code 400, when input is missing',() => {
+        const reqArticleID = 1;
+        const votesToUpdate = {}
+        return request(app).patch(`/api/articles/${reqArticleID}`)
+        .send(votesToUpdate)
+        .expect(400)
+        .then((res) => {
+            expect(res.body).toEqual({message: "Missing information"})
+        });
+    });
+    test('responds with status code 400, for invalid input',() => {
+        const reqArticleID = 1;
+        const votesToUpdate = {inc_votes: "varsha"}
+        return request(app).patch(`/api/articles/${reqArticleID}`)
+        .send(votesToUpdate)
+        .expect(400)
+        .then((res) => {
+            expect(res.body).toEqual({message: "Invalid input"})
+        });
+    });
+    test('responds with status code 404, when article_id is valid but non-existent',() => {
+        const reqArticleId=89
+        const votesToUpdate = {inc_votes: 29}
+        return request(app).patch(`/api/articles/${reqArticleId}`)
+        .send(votesToUpdate)
+        .expect(404)
+        .then((res) => {
+            expect(res.body).toEqual({message: 'article_id not found'})
+        });
+    });
+    test('responds with status code 400, when article_id is invalid',() => {
+        const reqArticleId="varsha"
+        const votesToUpdate = {inc_votes: 29}
+        return request(app).patch(`/api/articles/${reqArticleId}`)
+        .send(votesToUpdate)
+        .expect(400)
+        .then((res) => {
+            expect(res.body).toEqual({message: 'Invalid endpoint'})
         });
     });
 });
