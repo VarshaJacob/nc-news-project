@@ -2,7 +2,8 @@ const {getTopicInfo,
     getArticleInfo,
     getComments,
     getArticleIdInfo,
-    addNewComment
+    addNewComment,
+    getUserInfo
     } 
     = require('../models/models');
 
@@ -67,6 +68,14 @@ exports.postNewComment = (req,res,next) => {
     })
     .catch((err) => {
         next(err)
+    });
+};
+
+//9
+exports.getUsers = (req,res) => {
+    console.log('controller')
+    getUserInfo().then((users) => {
+        res.status(200).send({users})
     });
 };
 

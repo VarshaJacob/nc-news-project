@@ -6,7 +6,8 @@ const {getTopics,
     getArticles,
     getArticleId,
     getCommentByArticleId,
-    postNewComment
+    postNewComment,
+    getUsers
     }
     =require('./controllers/controllers');
 
@@ -33,7 +34,10 @@ app.get('/api/articles/:article_id', getArticleId);
 app.get('/api/articles/:article_id/comments', getCommentByArticleId);
 
 //7
-app.post('/api/articles/:article_id/comments', postNewComment)
+app.post('/api/articles/:article_id/comments', postNewComment);
+
+//9
+app.get('/api/users', getUsers);
 
 //endpoint not covered
 app.all('*',handle404Paths)
