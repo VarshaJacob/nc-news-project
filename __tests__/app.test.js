@@ -52,7 +52,7 @@ describe('GET /api/articles task 4',() => {
     test('response is in descding order of create_at',() => {
         return request(app).get('/api/articles')
         .then(({body}) => {
-            const descOrder= body.articles.sort((a,b) => b.created_at - a.created_at)
+            const descOrder=[...body.articles].sort((a,b) => b.created_at - a.created_at)
             expect(body.articles).toEqual(descOrder)
         })
     })
@@ -304,7 +304,7 @@ describe('GET /api/users task 9',() => {
 });
 
 //10
-describe.only('GET /api/articles task 10',() => {
+describe('GET /api/articles task 10',() => {
     test('responds with status code 200, with topic query',() => {
         return request(app).get('/api/articles?topic=mitch')
         .expect(200)
@@ -322,12 +322,13 @@ describe.only('GET /api/articles task 10',() => {
                         comment_count: expect.any(Number)
                     }));
             });
-            const sortOrder= body.articles.sort((a,b) => b.created_at - a.created_at)
+            const sortOrder= [...body.articles].sort((a,b) => b.created_at - a.created_at)
+            console.log(sortOrder)
             expect(body.articles).toEqual(sortOrder)
         });
     });
-    test.only('responds with status code 200, with topic and sort by query',() => {
-        return request(app).get('/api/articles?topic=mitch&sort_by=votes&order=asc')
+    test('responds with status code 200, with topic and sort by query',() => {
+        return request(app).get('/api/articles?topic=mitch&sort_by=votes')
         .expect(200)
         .then(({body}) => {
             expect(body.articles.length).toBe(11);
@@ -343,8 +344,7 @@ describe.only('GET /api/articles task 10',() => {
                         comment_count: expect.any(Number)
                     }));
             });
-            const sortOrder= body.articles.sort((a,b) => b.votes - a.votes)
-            console.log(body.articles)
+            const sortOrder= [...body.articles].sort((a,b) => b.votes - a.votes)
             expect(body.articles).toEqual(sortOrder)
         });
     });

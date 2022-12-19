@@ -44,8 +44,6 @@ app.patch('/api/articles/:article_id', patchArticleById);
 //9
 app.get('/api/users', getUsers);
 
-
-
 //endpoint not covered
 app.all('*',handle404Paths)
 

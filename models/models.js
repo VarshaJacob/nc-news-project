@@ -8,9 +8,12 @@ exports.getTopicInfo = () =>{
     });
 };
 
-//4
+//4 //10
 exports.getArticleInfo = (topic,sort_by='created_at',order='desc') => {
     console.log(topic,sort_by,order)
+    console.log(typeof(topic))
+    console.log(typeof(sort_by))
+    console.log(typeof(order))
     let sqlquery = `SELECT articles.author,articles.title,articles.article_id,articles.topic,articles.created_at,articles.votes,COUNT(comments.article_id)::INT AS comment_count FROM articles LEFT JOIN comments ON articles.article_id = comments.article_id `;
 
     if (topic) {
@@ -21,6 +24,7 @@ exports.getArticleInfo = (topic,sort_by='created_at',order='desc') => {
 
     return db.query(sqlquery)
     .then(({rows}) => {
+        console.log(rows)
         return (rows);
     });
 };
