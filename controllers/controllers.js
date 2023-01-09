@@ -28,7 +28,7 @@ exports.getArticles = (req,res,next) => {
     });
 };
 
-//5
+//5 //11
 exports.getArticleId = (req,res,next) => {
     const {article_id}=req.params;
     const promises = [checkExists('articles', 'article_id',article_id),getArticleIdInfo(article_id)];
