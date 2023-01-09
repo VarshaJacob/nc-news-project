@@ -26,10 +26,10 @@ app.use(express.json());
 //3
 app.get('/api/topics',getTopics);
 
-//4
+//4 //10
 app.get('/api/articles', getArticles);
 
-//5
+//5 //11
 app.get('/api/articles/:article_id', getArticleId);
 
 //6

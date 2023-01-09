@@ -323,7 +323,6 @@ describe('GET /api/articles task 10',() => {
                     }));
             });
             const sortOrder= [...body.articles].sort((a,b) => b.created_at - a.created_at)
-            console.log(sortOrder)
             expect(body.articles).toEqual(sortOrder)
         });
     });
