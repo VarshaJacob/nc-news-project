@@ -1,3 +1,5 @@
+const cors = require('cors'); 
+
 const express = require('express');
 const app=express();
 
@@ -20,6 +22,7 @@ const {handle404Paths,
     }
     =require('./controllers/controllers.error');
 
+app.use(cors());
 app.use(express.json());
 
 
