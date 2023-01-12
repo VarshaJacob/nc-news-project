@@ -4,6 +4,7 @@ const app = require('../app');
 const db = require('../db/connection');
 const seed = require('../db/seeds/seed');
 const testData = require('../db/data/test-data/index');
+const { checkExistsColumn } = require('../utils');
 
 beforeEach(() => seed(testData));
 afterAll(() => db.end());
@@ -322,6 +323,7 @@ describe('GET /api/articles task 10',() => {
                         comment_count: expect.any(Number)
                     }));
             });
+            
             const sortOrder= [...body.articles].sort((a,b) => b.created_at - a.created_at)
             expect(body.articles).toEqual(sortOrder)
         });
@@ -346,5 +348,41 @@ describe('GET /api/articles task 10',() => {
             const sortOrder= [...body.articles].sort((a,b) => b.votes - a.votes)
             expect(body.articles).toEqual(sortOrder)
         });
+    });
+    test('responds with status code 200, with topic and sort by query',() => {
+        return request(app).get('/api/articles?topic=mitch&sort_by=votes&order=asc')
+        .expect(200)
+        .then(({body}) => {
+            expect(body.articles.length).toBe(11);
+            body.articles.forEach((articleObj) => {
+                expect(articleObj).toEqual(
+                    expect.objectContaining({
+                        author: expect.any(String),
+                        title: expect.any(String),
+                        article_id: expect.any(Number),
+                        topic: "mitch",
+                        created_at: expect.any(String),
+                        votes: expect.any(Number),
+                        comment_count: expect.any(Number)
+                    }));
+            });
+            const sortOrder= [...body.articles].sort((a,b) => a.votes - b.votes)
+            expect(body.articles).toEqual(sortOrder)
+        });
+    });
+    test('responds with status code 404, when topic is not found',() => {
+        return request(app).get('/api/articles?topic=mitc&sort_by=votes&order=asc')
+        .expect(404)
+        .then((res) => {
+            expect(res.body).toEqual({message: 'slug not found'})
+        });
+    });
+    test('responds with status code 404, with sort_by column does not exist',() => {
+        return request(app).get('/api/articles?topic=mitch&sort_by=likes&order=asc')
+        .expect(400)
+        .then((res) => {
+            expect(res.body).toEqual({message: 'Invalid Input'})
+        });
+        
     });
 });
