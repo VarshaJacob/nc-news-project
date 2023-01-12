@@ -8,3 +8,4 @@ exports.checkExists = async (table,column,value) => {
     return Promise.reject({status:404, message:`${column} not found`});
    } 
 };
+

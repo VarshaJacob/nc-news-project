@@ -1,3 +1,4 @@
+const topics = require('../db/data/test-data/topics');
 const {getTopicInfo,
     getArticleInfo,
     getComments,
@@ -17,17 +18,35 @@ exports.getTopics = (req,res) => {
     });
 };
 
-//4
+//4 //10
 exports.getArticles = (req,res,next) => {
-    getArticleInfo().then((articles) =>{
-        res.status(200).send({articles})
-    })
-    .catch((err) => {
-        next(err)
-    });
+    const {topic,sort_by,order} = req.query;
+    
+    if(topic) {
+        const promises = [checkExists('topics', 'slug',topic), getArticleInfo(sort_by,order,topic)];
+
+        Promise.all(promises)
+        .then((response) =>{
+            const articles = response[1];
+            res.status(200).send({articles})
+        })
+        .catch((err) => {
+            next(err)
+        });
+    } else {
+        getArticleInfo(sort_by,order)
+        .then((response) => {
+            res.status(200).send({articles:response})
+        })
+        .catch((err) => {
+            next(err)
+        });
+    }
+
+   
 };
 
-//5
+//5 //11
 exports.getArticleId = (req,res,next) => {
     const {article_id}=req.params;
     const promises = [checkExists('articles', 'article_id',article_id),getArticleIdInfo(article_id)];

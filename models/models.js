@@ -8,14 +8,32 @@ exports.getTopicInfo = () =>{
     });
 };
 
-//4
-exports.getArticleInfo = () => {
-    const sqlquery = 'SELECT articles.author,articles.title,articles.article_id,articles.topic,articles.created_at,articles.votes,COUNT(comments.article_id) AS comment_count FROM articles LEFT JOIN comments ON articles.article_id = comments.article_id GROUP BY articles.article_id ORDER BY articles.created_at DESC;'
+//4 //10 (adding topic filter and sort order)
+exports.getArticleInfo = (sort_by='created_at',order='desc',topic) => {
+
+    const validSortBy = ['created_at','votes','comment_count'];
+    const validOrder= ['desc','asc']
+
+    if (validSortBy.includes(sort_by) && validOrder.includes(order)) {
+        let sqlquery = `SELECT articles.author,articles.title,articles.article_id,articles.topic,articles.created_at,articles.votes,COUNT(comments.article_id)::INT AS comment_count FROM articles LEFT JOIN comments ON articles.article_id = comments.article_id `;
+
+    if (topic) {
+        sqlquery += `WHERE articles.topic='${topic}'`;
+    }
+    
+    sqlquery += `GROUP BY articles.article_id ORDER BY articles.${sort_by} ${order.toUpperCase()};`;
+
     return db.query(sqlquery)
     .then(({rows}) => {
         return (rows);
     });
+    } else {
+        return Promise.reject({status:400, message:'Invalid Input'})
+    }
+
+    
 };
+
 
 //5
 exports.getArticleIdInfo = (article_id) => {
