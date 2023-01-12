@@ -377,12 +377,34 @@ describe('GET /api/articles task 10',() => {
             expect(res.body).toEqual({message: 'slug not found'})
         });
     });
-    test('responds with status code 404, with sort_by column does not exist',() => {
+    test('responds with status code 400, with sort_by column does not exist',() => {
         return request(app).get('/api/articles?topic=mitch&sort_by=likes&order=asc')
         .expect(400)
         .then((res) => {
             expect(res.body).toEqual({message: 'Invalid Input'})
         });
         
+    });
+});
+
+//12
+describe('DELETE /api/comments/:comment_id task 12',() => {
+    test('responds with status code 204',() => {
+        return request(app).delete('/api/comments/2')
+        .expect(204)
+    });
+    test('responds with status code 404 for valid but non-exsitent comment_id',() => {
+        return request(app).delete('/api/comments/20000')
+        .expect(404)
+        .then((res) => {
+            expect(res.body).toEqual({message:'comment_id not found'})
+        })
+    });
+    test('responds with status code 400 for invalid comment_id',() => {
+        return request(app).delete('/api/comments/mitch')
+        .expect(400)
+        .then((res) => {
+            expect(res.body).toEqual({message:'Invalid endpoint'})
+        })
     });
 });

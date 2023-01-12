@@ -88,3 +88,8 @@ exports.getUserInfo = () => {
         return (rows);
     });
 };
+
+//12
+exports.deleteComment = (comment_id) => {
+    return db.query('DELETE FROM comments WHERE comment_id=$1 RETURNING *;',[comment_id])
+};
