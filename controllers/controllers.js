@@ -5,7 +5,8 @@ const {getTopicInfo,
     getArticleIdInfo,
     addNewComment,
     updateArticleVotes,
-    getUserInfo
+    getUserInfo,
+    deleteComment
     } 
     = require('../models/models');
 
@@ -113,3 +114,17 @@ exports.getUsers = (req,res) => {
         res.status(200).send({users})
     });
 };
+
+//12
+exports.deleteCommentById = (req,res,next) => {
+    const {comment_id} = req.params;
+    const promises = [checkExists('comments','comment_id',comment_id),deleteComment(comment_id)]
+
+    Promise.all(promises)
+    .then(() => {
+        res.status(204).send();
+    })
+    .catch((err) => {
+        next(err)
+    })
+}

@@ -10,7 +10,8 @@ const {getTopics,
     getCommentByArticleId,
     postNewComment,
     patchArticleById,
-    getUsers
+    getUsers,
+    deleteCommentById
     }
     =require('./controllers/controllers');
 
@@ -46,6 +47,9 @@ app.patch('/api/articles/:article_id', patchArticleById);
 
 //9
 app.get('/api/users', getUsers);
+
+//12
+app.delete('/api/comments/:comment_id',deleteCommentById)
 
 //endpoint not covered
 app.all('*',handle404Paths)
