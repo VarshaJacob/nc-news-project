@@ -349,7 +349,7 @@ describe('GET /api/articles task 10',() => {
             expect(body.articles).toEqual(sortOrder)
         });
     });
-    test('responds with status code 200, with topic and sort by query',() => {
+    test('responds with status code 200, with topic and sort by votes',() => {
         return request(app).get('/api/articles?topic=mitch&sort_by=votes&order=asc')
         .expect(200)
         .then(({body}) => {
@@ -370,6 +370,27 @@ describe('GET /api/articles task 10',() => {
             expect(body.articles).toEqual(sortOrder)
         });
     });
+    test('responds with status code 200, with topic and sort by comment_count',() => {
+        return request(app).get('/api/articles?topic=mitch&sort_by=comment_count')
+        .expect(200)
+        .then(({body}) => {
+            expect(body.articles.length).toBe(11);
+            body.articles.forEach((articleObj) => {
+                expect(articleObj).toEqual(
+                    expect.objectContaining({
+                        author: expect.any(String),
+                        title: expect.any(String),
+                        article_id: expect.any(Number),
+                        topic: "mitch",
+                        created_at: expect.any(String),
+                        votes: expect.any(Number),
+                        comment_count: expect.any(Number)
+                    }));
+            });
+            const sortOrder= [...body.articles].sort((a,b) => b.comment_count - a.comment_count)
+            expect(body.articles).toEqual(sortOrder)
+        });
+    });
     test('responds with status code 404, when topic is not found',() => {
         return request(app).get('/api/articles?topic=mitc&sort_by=votes&order=asc')
         .expect(404)
@@ -386,6 +407,27 @@ describe('GET /api/articles task 10',() => {
         
     });
 });
+
+//11
+// describe('GET /api/articles/:article_id comment count task 11',() => {
+//     test('responds with status code 200, with article info with comment count',() => {
+//         return request(app).get('/api/articles/1')
+//         .expect(200)
+//         .then(({body}) =>{
+//             expect(body.article).toEqual(
+//                 expect.objectContaining({
+//                     author: expect.any(String),
+//                     title: expect.any(String),
+//                     article_id: 1,
+//                     body: expect.any(String),
+//                     topic: expect.any(String),
+//                     created_at: expect.any(String),
+//                     votes: expect.any(Number),
+//                     comment_count: expect.any(Number)
+//                 }))
+//         });    
+//     });
+// });
 
 //12
 describe('DELETE /api/comments/:comment_id task 12',() => {
