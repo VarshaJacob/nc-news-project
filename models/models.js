@@ -20,8 +20,15 @@ exports.getArticleInfo = (sort_by='created_at',order='desc',topic) => {
     if (topic) {
         sqlquery += `WHERE articles.topic='${topic}'`;
     }
+
+    if (sort_by === 'comment_count') {
+        sqlquery += `GROUP BY articles.article_id ORDER BY ${sort_by} ${order.toUpperCase()};`;
+
+    } else {
+        sqlquery += `GROUP BY articles.article_id ORDER BY articles.${sort_by} ${order.toUpperCase()};`;
+    }
     
-    sqlquery += `GROUP BY articles.article_id ORDER BY articles.${sort_by} ${order.toUpperCase()};`;
+    
 
     return db.query(sqlquery)
     .then(({rows}) => {
